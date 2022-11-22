@@ -1,6 +1,7 @@
 package com.em.apiproductschallenge.advice;
 
 import com.em.apiproductschallenge.exceptions.OpenFeignException;
+import com.em.apiproductschallenge.exceptions.RestException;
 import com.em.apiproductschallenge.utils.errors.ApiError;
 import com.em.apiproductschallenge.utils.errors.ApiFieldError;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,13 @@ public class RestAdvice {
     public ApiError feignTimeOutException(OpenFeignException openFeignException){
         return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 Collections.singletonList(new ApiFieldError(null, openFeignException.getMessage())));
+    }
+    @ResponseBody
+    @ExceptionHandler(RestException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError dominioDuplicadoException(RestException restException) {
+        return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                Collections.singletonList(new ApiFieldError(null, restException.getMessage())));
     }
 
 
